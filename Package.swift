@@ -12,25 +12,29 @@ Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0")
 ]
 
-var targetDependencies: [Target.Dependency] = [
-  "WrkstrmLog"
+let targetDependencies: [Target.Dependency] = [
+  "WrkstrmLog",
+  .target(
+    name: "WrkstrmPerformanceObjC",
+    condition: .when(platforms: [
+      .iOS, .macOS, .macCatalyst, .tvOS, .visionOS, .watchOS,
+    ])
+  ),
 ]
 
-#if canImport(Darwin)
-  targetDependencies.append(
-    .target(
-      name: "WrkstrmPerformanceObjC",
-      condition: .when(platforms: [
-        .iOS, .macOS, .macCatalyst, .tvOS, .visionOS, .watchOS,
-      ])
-    )
-  )
-#endif
-
-var packageTargets: [Target] = [
+let packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
     dependencies: targetDependencies,
+    swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+  .target(
+    name: "WrkstrmPerformanceObjC",
+    publicHeadersPath: "include"
+  ),
+  .target(
+    name: "WrkstrmPerformanceUIKit",
+    dependencies: ["WrkstrmPerformance"],
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   .testTarget(
@@ -40,34 +44,10 @@ var packageTargets: [Target] = [
   ),
 ]
 
-#if canImport(Darwin)
-  packageTargets.append(
-    .target(
-      name: "WrkstrmPerformanceObjC",
-      publicHeadersPath: "include"
-    )
-  )
-#endif
-
-#if canImport(UIKit)
-  packageTargets.append(
-    .target(
-      name: "WrkstrmPerformanceUIKit",
-      dependencies: ["WrkstrmPerformance"],
-      swiftSettings: Package.Inject.shared.swiftSettings
-    )
-  )
-#endif
-
-var packageProducts: [Product] = [
-  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
+let packageProducts: [Product] = [
+  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
+  .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"]),
 ]
-
-#if canImport(UIKit)
-  packageProducts.append(
-    .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
-  )
-#endif
 
 let package = Package(
   name: "WrkstrmPerformance",
