@@ -48,8 +48,12 @@ public final class TimeMonitor: @unchecked Sendable {
   }
 
   /// Mark a timestamp for a specific event
-  public func markTimestamp(_ event: String, file _: String = #file, line _: Int = #line) {
-    let timestamp = uptimeNanoseconds()
+  public func markTimestamp(
+    _ event: String,
+    timestamp: UInt64 = uptimeNanoseconds(),
+    file _: String = #file,
+    line _: Int = #line
+  ) {
     timestamps[event] = timestamp
 
     // Log the time since process start
@@ -118,7 +122,12 @@ extension TimeMonitor {
 
     if trackSinceStartup {
       // Also mark the timestamp for the measurement completion
-      markTimestamp("\(name).startup")
+      markTimestamp("\(name).startup", timestamp: end)
     }
+  }
+
+  /// Retrieves a recorded timestamp for the specified event
+  func timestamp(for event: String) -> UInt64? {
+    timestamps[event]
   }
 }
