@@ -79,8 +79,8 @@ public final class TimeMonitor: @unchecked Sendable {
     let sortedEvents = timestamps.sorted { $0.value < $1.value }
 
     // Calculate times relative to process start
-    for (event, _) in sortedEvents {
-      let timeSinceStart = timeIntervalSinceStartTime(uptimeNanoseconds())
+    for (event, ts) in sortedEvents {
+      let timeSinceStart = timeIntervalSinceStartTime(ts)
       report += "[\(event)] +\(String(format: "%.6f", timeSinceStart))s\n"
     }
 
