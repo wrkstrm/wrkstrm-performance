@@ -33,16 +33,27 @@ var packageTargets: [Target] = [
 
 #if !os(Linux)
 packageProducts.append(
+  .library(name: "WrkstrmPerformanceObjC", targets: ["WrkstrmPerformanceObjC"])
+)
+packageProducts.append(
   .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
 )
 packageTargets.insert(
   .target(
-    name: "WrkstrmPerformanceUIKit",
+    name: "WrkstrmPerformanceObjC",
     dependencies: ["WrkstrmPerformance"],
     publicHeadersPath: "include",
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   at: 1
+)
+packageTargets.insert(
+  .target(
+    name: "WrkstrmPerformanceUIKit",
+    dependencies: ["WrkstrmPerformance", "WrkstrmPerformanceObjC"],
+    swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+  at: 2
 )
 #endif
 

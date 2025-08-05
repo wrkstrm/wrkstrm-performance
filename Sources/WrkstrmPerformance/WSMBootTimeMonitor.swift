@@ -1,6 +1,7 @@
 import Foundation
-import WrkstrmPerformance
 
+#if canImport(ObjectiveC)
+@MainActor
 @objc(WSMBootTimeMonitor)
 public final class BootTimeMonitor: NSObject {
   @objc public static let shared = BootTimeMonitor()
@@ -12,3 +13,4 @@ public final class BootTimeMonitor: NSObject {
     TimeMonitor.markEarlyTimestamp(event)
   }
 }
+#endif
