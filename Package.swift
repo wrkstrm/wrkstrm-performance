@@ -28,33 +28,33 @@ var packageTargets: [Target] = [
     name: "WrkstrmPerformanceTests",
     dependencies: ["WrkstrmPerformance"],
     swiftSettings: Package.Inject.shared.swiftSettings
-  )
+  ),
 ]
 
 #if !os(Linux)
-packageProducts.append(
-  .library(name: "WrkstrmPerformanceObjC", targets: ["WrkstrmPerformanceObjC"])
-)
-packageProducts.append(
-  .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
-)
-packageTargets.insert(
-  .target(
-    name: "WrkstrmPerformanceObjC",
-    dependencies: ["WrkstrmPerformance"],
-    publicHeadersPath: "include",
-    swiftSettings: Package.Inject.shared.swiftSettings
-  ),
-  at: 1
-)
-packageTargets.insert(
-  .target(
-    name: "WrkstrmPerformanceUIKit",
-    dependencies: ["WrkstrmPerformance", "WrkstrmPerformanceObjC"],
-    swiftSettings: Package.Inject.shared.swiftSettings
-  ),
-  at: 2
-)
+  packageProducts.append(
+    .library(name: "WrkstrmPerformanceObjC", targets: ["WrkstrmPerformanceObjC"])
+  )
+  packageProducts.append(
+    .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
+  )
+  packageTargets.insert(
+    .target(
+      name: "WrkstrmPerformanceObjC",
+      dependencies: ["WrkstrmPerformance"],
+      publicHeadersPath: "include",
+      swiftSettings: Package.Inject.shared.swiftSettings
+    ),
+    at: 1
+  )
+  packageTargets.insert(
+    .target(
+      name: "WrkstrmPerformanceUIKit",
+      dependencies: ["WrkstrmPerformance", "WrkstrmPerformanceObjC"],
+      swiftSettings: Package.Inject.shared.swiftSettings
+    ),
+    at: 2
+  )
 #endif
 
 let package = Package(
@@ -65,7 +65,7 @@ let package = Package(
     .macCatalyst(.v13),
     .tvOS(.v16),
     .visionOS(.v1),
-    .watchOS(.v9)
+    .watchOS(.v9),
   ],
   products: packageProducts,
   dependencies: Package.Inject.shared.dependencies,
@@ -108,4 +108,3 @@ extension ProcessInfo {
 }
 
 // PACKAGE_SERVICE_END_V1
-

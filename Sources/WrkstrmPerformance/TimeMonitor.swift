@@ -23,18 +23,21 @@ enum BootTime: @unchecked Sendable {
 ///     }
 /// }
 public final class TimeMonitor: @unchecked Sendable {
-  public static let shared = TimeMonitor()
+  public static let shared = TimeMonitor(startTime: BootTime.start)
 
   /// Convert uptime nanoseconds to seconds
-  private func timeIntervalSince(_ startTime: UInt64) -> Double {
-    let elapsed = uptimeNanoseconds() - startTime
+  private func timeIntervalSinceStartTime(_ timeStamp: UInt64) -> Double {
+    let elapsed = timeStamp - startTime
     return Double(elapsed) / 1_000_000_000
   }
+
+  var startTime: UInt64
 
   // Track important timestamps using uptime nanoseconds for higher precision
   private var timestamps: [String: UInt64] = [:]
 
-  private init() {
+  public init(startTime: UInt64) {
+    self.startTime = startTime
     markTimestamp("monitor_init")
     Log.time.verbose("Time Monitor enabled!")
   }
@@ -50,7 +53,7 @@ public final class TimeMonitor: @unchecked Sendable {
     timestamps[event] = timestamp
 
     // Log the time since process start
-    let timeSinceStart = timeIntervalSince(BootTime.start)
+    let timeSinceStart = timeIntervalSinceStartTime(timestamp)
     Log.time.verbose("📊 [\(event)] +\(String(format: "%.6f", timeSinceStart))s")
   }
 
@@ -73,7 +76,7 @@ public final class TimeMonitor: @unchecked Sendable {
 
     // Calculate times relative to process start
     for (event, _) in sortedEvents {
-      let timeSinceStart = timeIntervalSince(BootTime.start)
+      let timeSinceStart = timeIntervalSinceStartTime(uptimeNanoseconds())
       report += "[\(event)] +\(String(format: "%.6f", timeSinceStart))s\n"
     }
 
@@ -119,4 +122,3 @@ extension TimeMonitor {
     }
   }
 }
-
