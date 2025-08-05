@@ -12,42 +12,39 @@ Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0")
 ]
 
-let targetDependencies: [Target.Dependency] = [
-  "WrkstrmLog",
-  .target(
-    name: "WrkstrmPerformanceObjC",
-    condition: .when(platforms: [
-      .iOS, .macOS, .macCatalyst, .tvOS, .visionOS, .watchOS,
-    ])
-  ),
+var packageProducts: [Product] = [
+  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
 ]
 
-let packageTargets: [Target] = [
+var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
-    dependencies: targetDependencies,
-    swiftSettings: Package.Inject.shared.swiftSettings
-  ),
-  .target(
-    name: "WrkstrmPerformanceObjC",
-    publicHeadersPath: "include"
-  ),
-  .target(
-    name: "WrkstrmPerformanceUIKit",
-    dependencies: ["WrkstrmPerformance"],
+    dependencies: [
+      "WrkstrmLog"
+    ],
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: ["WrkstrmPerformance"],
     swiftSettings: Package.Inject.shared.swiftSettings
-  ),
+  )
 ]
 
-let packageProducts: [Product] = [
-  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
-  .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"]),
-]
+#if !os(Linux)
+packageProducts.append(
+  .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
+)
+packageTargets.insert(
+  .target(
+    name: "WrkstrmPerformanceUIKit",
+    dependencies: ["WrkstrmPerformance"],
+    publicHeadersPath: "include",
+    swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+  at: 1
+)
+#endif
 
 let package = Package(
   name: "WrkstrmPerformance",
@@ -57,7 +54,7 @@ let package = Package(
     .macCatalyst(.v13),
     .tvOS(.v16),
     .visionOS(.v1),
-    .watchOS(.v9),
+    .watchOS(.v9)
   ],
   products: packageProducts,
   dependencies: Package.Inject.shared.dependencies,
@@ -100,3 +97,4 @@ extension ProcessInfo {
 }
 
 // PACKAGE_SERVICE_END_V1
+

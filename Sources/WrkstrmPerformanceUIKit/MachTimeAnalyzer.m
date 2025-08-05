@@ -1,16 +1,5 @@
 #import "MachTimeAnalyzer.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
-@interface WSMBootTimeMonitor : NSObject
-
-@property (class, nonatomic, readonly, strong) WSMBootTimeMonitor *shared;
-
-+ (void)markEarlyTimestamp:(NSString *)event;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#import "WSMBootTimeMonitor.h"
 
 uint64_t kGlobalStartTime = 0; // Define the global variable
 

@@ -1,21 +1,11 @@
 import Foundation
 import WrkstrmLog
 
-#if canImport(WrkstrmPerformanceObjC)
-  import WrkstrmPerformanceObjC
-#endif
-
-/// Provides the process start time, using the ObjC shim when available or a
-/// Swift fallback when it is not. This avoids having each app declare its own
-/// conditional startup timestamp.
+/// Provides the process start time using Swift's uptime clock. This avoids
+/// having each app declare its own conditional startup timestamp and keeps the
+/// core library free of Objective-C references for Linux compatibility.
 enum BootTime: @unchecked Sendable {
-  static let start: UInt64 = {
-    #if canImport(WrkstrmPerformanceObjC)
-      return WSMGetGlobalStartTime()
-    #else
-      return uptimeNanoseconds()
-    #endif
-  }()
+  static let start: UInt64 = uptimeNanoseconds()
 }
 
 /// Monitors and logs various stages of app boot time including pre-main stages
