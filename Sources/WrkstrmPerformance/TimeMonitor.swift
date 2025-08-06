@@ -8,43 +8,22 @@ enum BootTime: @unchecked Sendable {
   static let start: UInt64 = uptimeNanoseconds()
 }
 
-/// Monitors and logs various stages of app boot time including pre-main stages
-/// Example usage:
-///
-/// class AppDelegate {
-///     let bootMonitor = TimeMonitor.shared
-///
-///     func applicationDidFinishLaunching() {
-///         let startTime = Date().timeIntervalSinceReferenceDate
-///
-///         // Your initialization code here
-///
-///         bootMonitor.recordMetric(name: "app_initialization", startTime: startTime)
-///     }
-/// }
-public final class TimeMonitor: @unchecked Sendable {
+public actor TimeMonitor: @unchecked Sendable {
   public static let shared = TimeMonitor(startTime: BootTime.start)
+
+  var startTime: UInt64
+  private var timestamps: [String: UInt64] = [:]
+
+  public init(startTime: UInt64) {
+    self.startTime = startTime
+    Task { await markTimestamp("monitor_init") }
+    Log.time.verbose("Time Monitor enabled!")
+  }
 
   /// Convert uptime nanoseconds to seconds
   private func timeIntervalSinceStartTime(_ timeStamp: UInt64) -> Double {
     let elapsed = timeStamp - startTime
     return Double(elapsed) / 1_000_000_000
-  }
-
-  var startTime: UInt64
-
-  // Track important timestamps using uptime nanoseconds for higher precision
-  private var timestamps: [String: UInt64] = [:]
-
-  public init(startTime: UInt64) {
-    self.startTime = startTime
-    markTimestamp("monitor_init")
-    Log.time.verbose("Time Monitor enabled!")
-  }
-
-  /// Mark a timestamp for early boot events
-  public static func markEarlyTimestamp(_ event: String) {
-    shared.markTimestamp(event)
   }
 
   /// Mark a timestamp for a specific event
@@ -63,11 +42,11 @@ public final class TimeMonitor: @unchecked Sendable {
 
   // MARK: - App Lifecycle Events
 
-  @MainActor public func applicationDidFinishLaunching() {
+  public func applicationDidFinishLaunching() {
     markTimestamp("application_did_finish_launching")
   }
 
-  @MainActor public func applicationDidBecomeActive() {
+  public func applicationDidBecomeActive() {
     markTimestamp("application_did_become_active")
   }
 
@@ -93,9 +72,7 @@ public final class TimeMonitor: @unchecked Sendable {
     let duration = endTime - startTime
     Log.time.verbose("⏱️ [\(name)] took \(String(format: "%.6f", duration))s")
   }
-}
 
-extension TimeMonitor {
   /// Converts a duration between two uptime nanosecond values to seconds
   /// - Parameters:
   ///   - start: Starting uptime value
@@ -115,7 +92,7 @@ extension TimeMonitor {
     name: String,
     start: UInt64,
     end: UInt64 = uptimeNanoseconds(),
-    trackSinceStartup: Bool = false,
+    trackSinceStartup: Bool = false
   ) {
     let durationSeconds = duration(from: start, to: end)
     Log.time.verbose("⏱️ [\(name)] took \(String(format: "%.9f", durationSeconds))s")
@@ -129,5 +106,42 @@ extension TimeMonitor {
   /// Retrieves a recorded timestamp for the specified event
   func timestamp(for event: String) -> UInt64? {
     timestamps[event]
+  }
+}
+
+// MARK: - Nonisolated static helpers
+extension TimeMonitor {
+  /// Mark a timestamp for early boot events
+  public nonisolated static func markEarlyTimestamp(_ event: String) {
+    Task { await shared.markTimestamp(event) }
+  }
+
+  /// Mark a timestamp for a specific event
+  public nonisolated static func mark(_ event: String) {
+    Task { await shared.markTimestamp(event) }
+  }
+
+  public nonisolated static func applicationDidFinishLaunching() {
+    Task { @MainActor in await shared.applicationDidFinishLaunching() }
+  }
+
+  public nonisolated static func applicationDidBecomeActive() {
+    Task { @MainActor in await shared.applicationDidBecomeActive() }
+  }
+
+  public nonisolated static func recordPreciseMeasurement(
+    name: String,
+    start: UInt64,
+    end: UInt64 = uptimeNanoseconds(),
+    trackSinceStartup: Bool = false
+  ) {
+    Task {
+      await shared.recordPreciseMeasurement(
+        name: name,
+        start: start,
+        end: end,
+        trackSinceStartup: trackSinceStartup
+      )
+    }
   }
 }

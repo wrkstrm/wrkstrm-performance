@@ -6,14 +6,9 @@
   /// Hooks into `UIApplication` lifecycle notifications and forwards them to
   /// `TimeMonitor`.
   public final class TimeMonitorUIKit: NSObject {
-    private let monitor: TimeMonitor
     private let notificationCenter: NotificationCenter
 
-    public init(
-      monitor: TimeMonitor = .init(startTime: WSMGetGlobalStartTime()),
-      notificationCenter: NotificationCenter = .default
-    ) {
-      self.monitor = monitor
+    public init(notificationCenter: NotificationCenter = .default) {
       self.notificationCenter = notificationCenter
       super.init()
 
@@ -33,11 +28,11 @@
     }
 
     @MainActor @objc private func applicationDidFinishLaunching() {
-      monitor.applicationDidFinishLaunching()
+      TimeMonitor.applicationDidFinishLaunching()
     }
 
     @MainActor @objc private func applicationDidBecomeActive() {
-      monitor.applicationDidBecomeActive()
+      TimeMonitor.applicationDidBecomeActive()
     }
 
     deinit {

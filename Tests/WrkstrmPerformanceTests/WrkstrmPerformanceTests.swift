@@ -1,32 +1,32 @@
 import Foundation
 import Testing
-import Foundation
 
 @testable import WrkstrmPerformance
 
 @Test
-func markTimestampRecordsEvent() {
+func markTimestampRecordsEvent() async {
   let event = "test_event"
-  TimeMonitor.shared.markTimestamp(event)
-  let report = TimeMonitor.shared.generateReport()
+  await TimeMonitor.shared.markTimestamp(event)
+  let report = await TimeMonitor.shared.generateReport()
   #expect(report.contains(event))
 }
 
 @Test
-func generateReportUsesEventTimestamps() {
+func generateReportUsesEventTimestamps() async {
   let start = uptimeNanoseconds()
   let monitor = TimeMonitor(startTime: start)
 
-  monitor.markTimestamp("first")
-  Thread.sleep(forTimeInterval: 0.001)
-  monitor.markTimestamp("second")
+  await monitor.markTimestamp("first")
+  try? await Task.sleep(nanoseconds: 1_000_000)
+  await monitor.markTimestamp("second")
 
-  let report = monitor.generateReport()
+  let report = await monitor.generateReport()
 
   func elapsed(for event: String) -> Double {
     let line = report.split(separator: "\n").first { $0.contains("[\(event)]") } ?? ""
     let components = line.split(separator: "+")
-    let timePart = components.count > 1 ? components[1].replacingOccurrences(of: "s", with: "") : "0"
+    let timePart =
+      components.count > 1 ? components[1].replacingOccurrences(of: "s", with: "") : "0"
     return Double(timePart) ?? 0
   }
 
@@ -37,22 +37,22 @@ func generateReportUsesEventTimestamps() {
 }
 
 @Test
-func recordPreciseMeasurementUsesProvidedEndTimeForStartupTracking() {
+func recordPreciseMeasurementUsesProvidedEndTimeForStartupTracking() async {
   let start = uptimeNanoseconds()
   let monitor = TimeMonitor(startTime: start)
 
   let measurementStart = uptimeNanoseconds()
-  Thread.sleep(forTimeInterval: 0.01)
+  try? await Task.sleep(nanoseconds: 10_000_000)
   let measurementEnd = uptimeNanoseconds()
-  Thread.sleep(forTimeInterval: 0.01)
+  try? await Task.sleep(nanoseconds: 10_000_000)
 
-  monitor.recordPreciseMeasurement(
+  await monitor.recordPreciseMeasurement(
     name: "custom_measurement",
     start: measurementStart,
     end: measurementEnd,
     trackSinceStartup: true
   )
 
-  let recorded = monitor.timestamp(for: "custom_measurement.startup")
+  let recorded = await monitor.timestamp(for: "custom_measurement.startup")
   #expect(recorded == measurementEnd)
 }
