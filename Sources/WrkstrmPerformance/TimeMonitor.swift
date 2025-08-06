@@ -21,6 +21,7 @@ public actor TimeMonitor: @unchecked Sendable {
   }
 
   /// Convert uptime nanoseconds to seconds
+  @inline(__always)
   private func timeIntervalSinceStartTime(_ timeStamp: UInt64) -> Double {
     let elapsed = timeStamp - startTime
     return Double(elapsed) / 1_000_000_000
@@ -78,6 +79,7 @@ public actor TimeMonitor: @unchecked Sendable {
   ///   - start: Starting uptime value
   ///   - end: Ending uptime value
   /// - Returns: Duration in seconds as a Double
+  @inline(__always)
   func duration(from start: UInt64, to end: UInt64) -> Double {
     let elapsed = end - start
     return Double(elapsed) / 1_000_000_000
