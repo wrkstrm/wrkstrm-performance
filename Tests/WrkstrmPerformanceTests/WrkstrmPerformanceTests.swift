@@ -56,3 +56,15 @@ func recordPreciseMeasurementUsesProvidedEndTimeForStartupTracking() async {
   let recorded = await monitor.timestamp(for: "custom_measurement.startup")
   #expect(recorded == measurementEnd)
 }
+
+@Test
+func measureAverageExecutionTimeReturnsMean() async throws {
+  let iterations = 3
+  let average = try await TimeMonitor.shared.measureAverageExecutionTime(
+    name: "sleep_test",
+    iterations: iterations
+  ) {
+    try await Task.sleep(nanoseconds: 10_000_000)
+  }
+  #expect(average >= 0.009 && average < 0.05)
+}
