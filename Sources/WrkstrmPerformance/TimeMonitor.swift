@@ -105,6 +105,31 @@ public actor TimeMonitor: @unchecked Sendable {
     }
   }
 
+  /// Measures an action multiple times and returns the average execution time.
+  /// - Parameters:
+  ///   - name: Name of the measurement for logging.
+  ///   - iterations: Number of times to perform the action.
+  ///   - action: Closure to be executed and measured.
+  /// - Returns: The average duration in seconds.
+  public func measureAverageExecutionTime(
+    name: String,
+    iterations: Int,
+    action: @Sendable () async throws -> Void
+  ) async rethrows -> Double {
+    precondition(iterations > 0, "Iterations must be greater than zero in measureAverageExecutionTime")
+    var total: UInt64 = 0
+    for _ in 0..<iterations {
+      let start = uptimeNanoseconds()
+      try await action()
+      let end = uptimeNanoseconds()
+      total += end - start
+    }
+    let averageSeconds = Double(total) / Double(iterations) / 1_000_000_000
+    Log.time.verbose(
+      "⏱️ [\(name)] avg \(String(format: "%.9f", averageSeconds))s over \(iterations) runs")
+    return averageSeconds
+  }
+
   /// Retrieves a recorded timestamp for the specified event
   func timestamp(for event: String) -> UInt64? {
     timestamps[event]
@@ -145,5 +170,17 @@ extension TimeMonitor {
         trackSinceStartup: trackSinceStartup
       )
     }
+  }
+
+  public nonisolated static func measureAverageExecutionTime(
+    name: String,
+    iterations: Int,
+    action: @Sendable () async throws -> Void
+  ) async rethrows -> Double {
+    try await shared.measureAverageExecutionTime(
+      name: name,
+      iterations: iterations,
+      action: action
+    )
   }
 }
