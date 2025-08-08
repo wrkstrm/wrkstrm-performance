@@ -116,7 +116,8 @@ public actor TimeMonitor: @unchecked Sendable {
     iterations: Int,
     action: @Sendable () async throws -> Void
   ) async rethrows -> Double {
-    precondition(iterations > 0, "Iterations must be greater than zero in measureAverageExecutionTime")
+    precondition(
+      iterations > 0, "Iterations must be greater than zero in measureAverageExecutionTime")
     var total: UInt64 = 0
     for _ in 0..<iterations {
       let start = uptimeNanoseconds()
