@@ -1,0 +1,11 @@
+{
+  "baselineName": "main",
+  "machine": {
+    "hostname": "unknown",
+    "processors": 0,
+    "processorType": "unknown",
+    "memory": 0,
+    "kernelVersion": "unknown"
+  },
+  "results": {}
+}

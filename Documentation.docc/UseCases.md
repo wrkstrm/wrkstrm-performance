@@ -22,6 +22,16 @@ swift package benchmark
 
 Results include percentile columns such as `p50`, `p90`, and `p99`. Lower percentiles represent typical performance, while higher values highlight tail latencies.
 
+## Baselines
+
+Create a reusable baseline and compare subsequent runs against it:
+
+```bash
+cd apple/spm/universal/WrkstrmPerformance
+SPM_USE_LOCAL_DEPS=false ENABLE_BENCHMARKS=true swift package --allow-writing-to-package-directory benchmark baseline update main
+SPM_USE_LOCAL_DEPS=false ENABLE_BENCHMARKS=true swift package benchmark baseline check main
+```
+
 ## See Also
 
 - Repository guidance in `.wrkstrm/clia/Agents.md`
