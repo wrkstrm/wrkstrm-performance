@@ -11,6 +11,17 @@ WrkstrmPerformance provides helpers for timing and benchmarking Swift code.
 - **Measure average execution time** – use ``TimeMonitor.measureAverageExecutionTime`` in benchmarks or tests to run an operation repeatedly and compute the mean. [Implemented]
 - **CLI integration** – envision a wrapper command that spawns a child process, streams its output, and emits aggregated timing metrics for pipeline analysis. [Could be implemented]
 
+## Running Benchmarks
+
+Run the included `TimeMonitorBenchmarks` suite to compare helper APIs against manual loops:
+
+```bash
+cd apple/spm/universal/WrkstrmPerformance
+swift package benchmark
+```
+
+Results include percentile columns such as `p50`, `p90`, and `p99`. Lower percentiles represent typical performance, while higher values highlight tail latencies.
+
 ## See Also
 
 - Repository guidance in `.wrkstrm/clia/Agents.md`
