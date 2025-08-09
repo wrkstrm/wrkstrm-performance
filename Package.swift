@@ -21,28 +21,37 @@ var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
     dependencies: [
-      "WrkstrmLog"
+      "WrkstrmLog",
+      .product(name: "Benchmark", package: "package-benchmark")
     ],
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   .testTarget(
     name: "WrkstrmPerformanceTests",
-    dependencies: ["WrkstrmPerformance"],
-    swiftSettings: Package.Inject.shared.swiftSettings
-  ),
-  .executableTarget(
-    name: "TimeMonitorBenchmarks",
     dependencies: [
       "WrkstrmPerformance",
       .product(name: "Benchmark", package: "package-benchmark")
     ],
-    path: "Benchmarks/TimeMonitorBenchmarks",
-    swiftSettings: Package.Inject.shared.swiftSettings,
-    plugins: [
-      .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
-    ]
+    swiftSettings: Package.Inject.shared.swiftSettings
   ),
 ]
+
+if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+  packageTargets.append(
+    .executableTarget(
+      name: "TimeMonitorBenchmarks",
+      dependencies: [
+        "WrkstrmPerformance",
+        .product(name: "Benchmark", package: "package-benchmark")
+      ],
+      path: "Benchmarks/TimeMonitorBenchmarks",
+      swiftSettings: Package.Inject.shared.swiftSettings,
+      plugins: [
+        .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
+      ]
+    )
+  )
+}
 
 #if !os(Linux)
   packageProducts.append(
