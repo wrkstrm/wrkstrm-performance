@@ -3,21 +3,15 @@ import WrkstrmPerformance
 import Foundation
 
 let timeMonitorBenchmarks = BenchmarkSuite(name: "TimeMonitorBenchmarks") { suite in
-  suite.benchmark("measureAverageExecutionTime") { _ in
-    let group = DispatchGroup()
-    group.enter()
-    Task {
-      _ = try? await TimeMonitor.measureAverageExecutionTime(
-        name: "noop",
-        iterations: 10
-      ) {
-        for _ in 0..<1000 {
-          _ = 1 + 1
-        }
+  suite.benchmarkAsync("measureAverageExecutionTime") { _ in
+    _ = try? await TimeMonitor.measureAverageExecutionTime(
+      name: "noop",
+      iterations: 10
+    ) {
+      for _ in 0..<1000 {
+        _ = 1 + 1
       }
-      group.leave()
     }
-    group.wait()
   }
 
   suite.benchmark("manualLoop") { _ in
