@@ -9,7 +9,8 @@ Package.Inject.local.dependencies = [
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0")
+  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0"),
+  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
 ]
 
 var packageProducts: [Product] = [
@@ -28,6 +29,18 @@ var packageTargets: [Target] = [
     name: "WrkstrmPerformanceTests",
     dependencies: ["WrkstrmPerformance"],
     swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+  .executableTarget(
+    name: "TimeMonitorBenchmarks",
+    dependencies: [
+      "WrkstrmPerformance",
+      .product(name: "Benchmark", package: "package-benchmark")
+    ],
+    path: "Benchmarks/TimeMonitorBenchmarks",
+    swiftSettings: Package.Inject.shared.swiftSettings,
+    plugins: [
+      .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
+    ]
   ),
 ]
 
