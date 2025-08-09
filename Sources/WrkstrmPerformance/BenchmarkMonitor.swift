@@ -64,7 +64,15 @@ public enum BenchmarkMonitor {
           statistics: stats
         )
       case .peakMemoryResident:
+        #if canImport(Glibc)
+        // On Linux, ru_maxrss is in kilobytes, so multiply by 1024
         let memBytes = Int(endUsage.ru_maxrss) * 1024
+        #elseif canImport(Darwin)
+        // On macOS, ru_maxrss is in bytes, so use as-is
+        let memBytes = Int(endUsage.ru_maxrss)
+        #else
+        let memBytes = Int(endUsage.ru_maxrss) // Fallback: assume bytes
+        #endif
         let stats = Statistics(units: .count)
         stats.add(memBytes)
         results[metric] = BenchmarkResult(
