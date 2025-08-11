@@ -1,8 +1,9 @@
 import Benchmark
+
 #if canImport(Glibc)
-import Glibc
+  import Glibc
 #elseif canImport(Darwin)
-import Darwin
+  import Darwin
 #endif
 
 /// Utility wrapper for running benchmarks with simple APIs.
@@ -21,17 +22,19 @@ public enum BenchmarkMonitor {
     configuration: Benchmark.Configuration,
     _ body: @escaping (_ benchmark: Benchmark) -> Void
   ) -> [BenchmarkMetric: BenchmarkResult] {
-    guard let benchmark = Benchmark(name, configuration: configuration, closure: { _ in }) else { return [:] }
+    guard let benchmark = Benchmark(name, configuration: configuration, closure: { _ in }) else {
+      return [:]
+    }
 
     var startUsage = rusage()
-    getrusage(RUSAGE_SELF.rawValue, &startUsage)
+    getrusage(RUSAGE_SELF, &startUsage)
     let start = uptimeNanoseconds()
 
     body(benchmark)
 
     let end = uptimeNanoseconds()
     var endUsage = rusage()
-    getrusage(RUSAGE_SELF.rawValue, &endUsage)
+    getrusage(RUSAGE_SELF, &endUsage)
 
     var results: [BenchmarkMetric: BenchmarkResult] = [:]
 
@@ -50,8 +53,12 @@ public enum BenchmarkMonitor {
           statistics: stats
         )
       case .cpuSystem:
-        let startNS = Double(startUsage.ru_stime.tv_sec) * 1_000_000_000 + Double(startUsage.ru_stime.tv_usec) * 1000
-        let endNS = Double(endUsage.ru_stime.tv_sec) * 1_000_000_000 + Double(endUsage.ru_stime.tv_usec) * 1000
+        let startNS =
+          Double(startUsage.ru_stime.tv_sec) * 1_000_000_000 + Double(startUsage.ru_stime.tv_usec)
+          * 1000
+        let endNS =
+          Double(endUsage.ru_stime.tv_sec) * 1_000_000_000 + Double(endUsage.ru_stime.tv_usec)
+          * 1000
         let stats = Statistics()
         stats.add(Int(endNS - startNS))
         results[metric] = BenchmarkResult(
@@ -65,13 +72,13 @@ public enum BenchmarkMonitor {
         )
       case .peakMemoryResident:
         #if canImport(Glibc)
-        // On Linux, ru_maxrss is in kilobytes, so multiply by 1024
-        let memBytes = Int(endUsage.ru_maxrss) * 1024
+          // On Linux, ru_maxrss is in kilobytes, so multiply by 1024
+          let memBytes = Int(endUsage.ru_maxrss) * 1024
         #elseif canImport(Darwin)
-        // On macOS, ru_maxrss is in bytes, so use as-is
-        let memBytes = Int(endUsage.ru_maxrss)
+          // On macOS, ru_maxrss is in bytes, so use as-is
+          let memBytes = Int(endUsage.ru_maxrss)
         #else
-        let memBytes = Int(endUsage.ru_maxrss) // Fallback: assume bytes
+          let memBytes = Int(endUsage.ru_maxrss)  // Fallback: assume bytes
         #endif
         let stats = Statistics(units: .count)
         stats.add(memBytes)

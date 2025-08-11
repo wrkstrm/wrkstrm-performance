@@ -44,4 +44,3 @@ let timeMonitorBenchmarks = BenchmarkSuite(name: "TimeMonitorBenchmarks") { suit
 }
 
 Benchmark.main([timeMonitorBenchmarks])
-
