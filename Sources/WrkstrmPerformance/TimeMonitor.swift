@@ -52,7 +52,7 @@ public actor TimeMonitor: @unchecked Sendable {
   }
 
   /// Generate a detailed boot time report
-  func generateReport() -> String {
+  public func generateReport() -> String {
     var report = "📱 Detailed Boot Time Report:\n"
 
     // Sort events chronologically
