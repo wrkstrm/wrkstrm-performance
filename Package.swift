@@ -20,6 +20,22 @@ Package.Inject.remote.dependencies = [
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
 ]
+#if !os(Linux)
+  packageProducts.append(
+    .library(
+      name: "WrkstrmPerformanceObjC",
+      type: .static,
+      targets: ["WrkstrmPerformanceObjC"]
+    )
+  )
+  packageProducts.append(
+    .library(
+      name: "WrkstrmPerformanceUIKit",
+      type: .static,
+      targets: ["WrkstrmPerformanceUIKit"]
+    )
+  )
+#endif
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
   "WrkstrmLog"
@@ -41,13 +57,31 @@ var packageTargets: [Target] = [
     name: "WrkstrmPerformance",
     dependencies: wrkstrmPerformanceDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
-  ),
+  )
+]
+#if !os(Linux)
+  packageTargets += [
+    .target(
+      name: "WrkstrmPerformanceObjC",
+      publicHeadersPath: "include"
+    ),
+    .target(
+      name: "WrkstrmPerformanceUIKit",
+      dependencies: [
+        "WrkstrmPerformance",
+        "WrkstrmPerformanceObjC",
+      ],
+      swiftSettings: Package.Inject.shared.swiftSettings
+    ),
+  ]
+#endif
+packageTargets.append(
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: wrkstrmPerformanceTestDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
-  ),
-]
+  )
+)
 
 #if !os(Linux)
   packageTargets.append(
