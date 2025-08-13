@@ -28,8 +28,8 @@ Create a reusable baseline and compare subsequent runs against it:
 
 ```bash
 cd apple/spm/universal/WrkstrmPerformance
-SPM_USE_LOCAL_DEPS=false ENABLE_BENCHMARKS=true swift package --allow-writing-to-package-directory benchmark baseline update main
-SPM_USE_LOCAL_DEPS=false ENABLE_BENCHMARKS=true swift package benchmark baseline check main
+SPM_USE_LOCAL_DEPS=false swift package --allow-writing-to-package-directory benchmark baseline update main
+SPM_USE_LOCAL_DEPS=false swift package benchmark baseline check main
 ```
 
 ## See Also

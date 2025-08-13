@@ -1,3 +1,4 @@
+#if canImport(Benchmark)
 import Benchmark
 import Testing
 
@@ -20,3 +21,4 @@ func benchmarkMonitorCapturesMetrics() {
   #expect(results[.peakMemoryResident] != nil)
   #expect(results[.cpuSystem] != nil)
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(Benchmark)
 import Benchmark
 
 #if canImport(Glibc)
@@ -109,3 +110,4 @@ public enum BenchmarkMonitor {
     measure(name, configuration: configuration) { _ in body() }
   }
 }
+#endif

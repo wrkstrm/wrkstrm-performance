@@ -9,34 +9,47 @@ Package.Inject.local.dependencies = [
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0"),
-  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0")),
+  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0")
 ]
+#if !os(Linux)
+  Package.Inject.remote.dependencies.append(
+    .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
+  )
+#endif
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
 ]
 
+var wrkstrmPerformanceDependencies: [Target.Dependency] = [
+  "WrkstrmLog"
+]
+var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
+  "WrkstrmPerformance"
+]
+#if !os(Linux)
+  wrkstrmPerformanceDependencies.append(
+    .product(name: "Benchmark", package: "package-benchmark")
+  )
+  wrkstrmPerformanceTestDependencies.append(
+    .product(name: "Benchmark", package: "package-benchmark")
+  )
+#endif
+
 var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
-    dependencies: [
-      "WrkstrmLog",
-      .product(name: "Benchmark", package: "package-benchmark"),
-    ],
+    dependencies: wrkstrmPerformanceDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   .testTarget(
     name: "WrkstrmPerformanceTests",
-    dependencies: [
-      "WrkstrmPerformance",
-      .product(name: "Benchmark", package: "package-benchmark"),
-    ],
+    dependencies: wrkstrmPerformanceTestDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
 ]
 
-if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+#if !os(Linux)
   packageTargets.append(
     .executableTarget(
       name: "TimeMonitorBenchmarks",
@@ -50,32 +63,6 @@ if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
         .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
       ]
     )
-  )
-}
-
-#if !os(Linux)
-  packageProducts.append(
-    .library(name: "WrkstrmPerformanceObjC", targets: ["WrkstrmPerformanceObjC"])
-  )
-  packageProducts.append(
-    .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
-  )
-  packageTargets.insert(
-    .target(
-      name: "WrkstrmPerformanceObjC",
-      dependencies: ["WrkstrmPerformance"],
-      publicHeadersPath: "include",
-      swiftSettings: Package.Inject.shared.swiftSettings
-    ),
-    at: 1
-  )
-  packageTargets.insert(
-    .target(
-      name: "WrkstrmPerformanceUIKit",
-      dependencies: ["WrkstrmPerformance", "WrkstrmPerformanceObjC"],
-      swiftSettings: Package.Inject.shared.swiftSettings
-    ),
-    at: 2
   )
 #endif
 
