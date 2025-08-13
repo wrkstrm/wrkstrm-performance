@@ -19,3 +19,17 @@ WrkstrmPerformance provides instrumentation utilities for timing and benchmarkin
 
 
 - Always declare Swift object types instead of relying on inference. Explicit types speed builds and development.
+
+### Swift initializer shorthand
+
+When the variable’s type is known, Swift lets you use the `.init` shorthand.
+These two lines are equivalent:
+
+```swift
+let split = UISplitViewController(style: .doubleColumn)       // type inferred
+let split: UISplitViewController = .init(style: .doubleColumn) // explicit type + .init shorthand
+```
+
+In both cases, the `style: .doubleColumn` initializer sets up the split view
+controller with the double-column layout introduced in iOS 14. The `.init`
+style works only when the compiler can already determine the variable’s type.
