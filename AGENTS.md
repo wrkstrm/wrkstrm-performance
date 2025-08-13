@@ -17,3 +17,5 @@ WrkstrmPerformance provides instrumentation utilities for timing and benchmarkin
 - Wrap critical code with timing helpers to record durations
 - Compare metrics before and after changes to quantify impact
 
+
+- Always declare Swift object types instead of relying on inference. Explicit types speed builds and development.
