@@ -10,28 +10,43 @@ Package.Inject.local.dependencies = [
 
 Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0"),
-  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0")),
 ]
+
+if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+  Package.Inject.remote.dependencies.append(
+    .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
+  )
+}
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
 ]
 
+var wrkstrmPerformanceDependencies: [Target.Dependency] = [
+  "WrkstrmLog"
+]
+var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
+  "WrkstrmPerformance"
+]
+
+if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+  wrkstrmPerformanceDependencies.append(
+    .product(name: "Benchmark", package: "package-benchmark")
+  )
+  wrkstrmPerformanceTestDependencies.append(
+    .product(name: "Benchmark", package: "package-benchmark")
+  )
+}
+
 var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
-    dependencies: [
-      "WrkstrmLog",
-      .product(name: "Benchmark", package: "package-benchmark"),
-    ],
+    dependencies: wrkstrmPerformanceDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
   .testTarget(
     name: "WrkstrmPerformanceTests",
-    dependencies: [
-      "WrkstrmPerformance",
-      .product(name: "Benchmark", package: "package-benchmark"),
-    ],
+    dependencies: wrkstrmPerformanceTestDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
   ),
 ]
