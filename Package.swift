@@ -9,7 +9,7 @@ Package.Inject.local.dependencies = [
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0"),
+  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0")
 ]
 
 if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
@@ -67,32 +67,6 @@ if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
     )
   )
 }
-
-#if !os(Linux)
-  packageProducts.append(
-    .library(name: "WrkstrmPerformanceObjC", targets: ["WrkstrmPerformanceObjC"])
-  )
-  packageProducts.append(
-    .library(name: "WrkstrmPerformanceUIKit", targets: ["WrkstrmPerformanceUIKit"])
-  )
-  packageTargets.insert(
-    .target(
-      name: "WrkstrmPerformanceObjC",
-      dependencies: ["WrkstrmPerformance"],
-      publicHeadersPath: "include",
-      swiftSettings: Package.Inject.shared.swiftSettings
-    ),
-    at: 1
-  )
-  packageTargets.insert(
-    .target(
-      name: "WrkstrmPerformanceUIKit",
-      dependencies: ["WrkstrmPerformance", "WrkstrmPerformanceObjC"],
-      swiftSettings: Package.Inject.shared.swiftSettings
-    ),
-    at: 2
-  )
-#endif
 
 let package = Package(
   name: "WrkstrmPerformance",
