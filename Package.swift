@@ -11,12 +11,11 @@ Package.Inject.local.dependencies = [
 Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "1.0.0")
 ]
-
-if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+#if !os(Linux)
   Package.Inject.remote.dependencies.append(
     .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
   )
-}
+#endif
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
@@ -28,15 +27,14 @@ var wrkstrmPerformanceDependencies: [Target.Dependency] = [
 var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
   "WrkstrmPerformance"
 ]
-
-if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+#if !os(Linux)
   wrkstrmPerformanceDependencies.append(
     .product(name: "Benchmark", package: "package-benchmark")
   )
   wrkstrmPerformanceTestDependencies.append(
     .product(name: "Benchmark", package: "package-benchmark")
   )
-}
+#endif
 
 var packageTargets: [Target] = [
   .target(
@@ -51,7 +49,7 @@ var packageTargets: [Target] = [
   ),
 ]
 
-if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
+#if !os(Linux)
   packageTargets.append(
     .executableTarget(
       name: "TimeMonitorBenchmarks",
@@ -66,7 +64,7 @@ if ProcessInfo.processInfo.environment["ENABLE_BENCHMARKS"] == "true" {
       ]
     )
   )
-}
+#endif
 
 let package = Package(
   name: "WrkstrmPerformance",
