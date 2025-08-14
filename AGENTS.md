@@ -6,7 +6,7 @@ WrkstrmPerformance provides instrumentation utilities for timing and benchmarkin
 ## Goals
 - Measure performance regressions and improvements across packages
 - Surface timing metrics so agents can validate optimizations
-- Expose simple start/stop APIs that integrate with XCTest
+- Expose simple start/stop APIs that integrate with Swift Testing
 - Strive for time and space efficiency, pulling in as few resources as possible
 
 ## Future Goals
