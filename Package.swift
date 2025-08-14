@@ -51,7 +51,7 @@ var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
   wrkstrmPerformanceTestDependencies.append(
     .product(name: "Benchmark", package: "package-benchmark")
   )
-#endif // !os(Linux) && canImport(Darwin)
+#endif  // !os(Linux) && canImport(Darwin)
 
 var packageTargets: [Target] = [
   .target(
