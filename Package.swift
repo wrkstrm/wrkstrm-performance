@@ -12,29 +12,29 @@ Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0")
 ]
 #if !os(Linux)
-  Package.Inject.remote.dependencies.append(
-    .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
-  )
+Package.Inject.remote.dependencies.append(
+  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
+)
 #endif
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
 ]
 #if !os(Linux)
-  packageProducts.append(
-    .library(
-      name: "WrkstrmPerformanceObjC",
-      type: .static,
-      targets: ["WrkstrmPerformanceObjC"]
-    )
+packageProducts.append(
+  .library(
+    name: "WrkstrmPerformanceObjC",
+    type: .static,
+    targets: ["WrkstrmPerformanceObjC"]
   )
-  packageProducts.append(
-    .library(
-      name: "WrkstrmPerformanceUIKit",
-      type: .static,
-      targets: ["WrkstrmPerformanceUIKit"]
-    )
+)
+packageProducts.append(
+  .library(
+    name: "WrkstrmPerformanceUIKit",
+    type: .static,
+    targets: ["WrkstrmPerformanceUIKit"]
   )
+)
 #endif
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
@@ -45,12 +45,12 @@ var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
 ]
 
 #if !os(Linux) && canImport(Darwin)
-  wrkstrmPerformanceDependencies.append(
-    .product(name: "Benchmark", package: "package-benchmark")
-  )
-  wrkstrmPerformanceTestDependencies.append(
-    .product(name: "Benchmark", package: "package-benchmark")
-  )
+wrkstrmPerformanceDependencies.append(
+  .product(name: "Benchmark", package: "package-benchmark")
+)
+wrkstrmPerformanceTestDependencies.append(
+  .product(name: "Benchmark", package: "package-benchmark")
+)
 #endif  // !os(Linux) && canImport(Darwin)
 
 var packageTargets: [Target] = [
@@ -61,20 +61,20 @@ var packageTargets: [Target] = [
   )
 ]
 #if !os(Linux)
-  packageTargets += [
-    .target(
-      name: "WrkstrmPerformanceObjC",
-      publicHeadersPath: "include"
-    ),
-    .target(
-      name: "WrkstrmPerformanceUIKit",
-      dependencies: [
-        "WrkstrmPerformance",
-        "WrkstrmPerformanceObjC",
-      ],
-      swiftSettings: Package.Inject.shared.swiftSettings
-    ),
-  ]
+packageTargets += [
+  .target(
+    name: "WrkstrmPerformanceObjC",
+    publicHeadersPath: "include"
+  ),
+  .target(
+    name: "WrkstrmPerformanceUIKit",
+    dependencies: [
+      "WrkstrmPerformance",
+      "WrkstrmPerformanceObjC",
+    ],
+    swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+]
 #endif
 packageTargets.append(
   .testTarget(
@@ -85,20 +85,20 @@ packageTargets.append(
 )
 
 #if !os(Linux)
-  packageTargets.append(
-    .executableTarget(
-      name: "TimeMonitorBenchmarks",
-      dependencies: [
-        "WrkstrmPerformance",
-        .product(name: "Benchmark", package: "package-benchmark"),
-      ],
-      path: "Benchmarks/TimeMonitorBenchmarks",
-      swiftSettings: Package.Inject.shared.swiftSettings,
-      plugins: [
-        .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
-      ]
-    )
+packageTargets.append(
+  .executableTarget(
+    name: "TimeMonitorBenchmarks",
+    dependencies: [
+      "WrkstrmPerformance",
+      .product(name: "Benchmark", package: "package-benchmark"),
+    ],
+    path: "Benchmarks/TimeMonitorBenchmarks",
+    swiftSettings: Package.Inject.shared.swiftSettings,
+    plugins: [
+      .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
+    ]
   )
+)
 #endif
 
 let package = Package(

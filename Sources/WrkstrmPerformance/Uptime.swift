@@ -1,7 +1,7 @@
 #if canImport(Darwin)
-  import Darwin
+import Darwin
 #else
-  import Glibc
+import Glibc
 #endif
 
 /// Returns the system uptime using the most precise monotonic clock in
@@ -12,18 +12,18 @@
 @inlinable @inline(__always)
 public func uptimeNanoseconds() -> UInt64 {
   #if canImport(Darwin)
-    return clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
+  return clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
   #else
-    var timeSpec = timespec()
-    #if os(Linux)
-      // Prefer CLOCK_BOOTTIME which continues ticking during suspend.
-      // If unavailable, fall back to the raw hardware clock.
-      if clock_gettime(CLOCK_BOOTTIME, &timeSpec) != 0 {
-        clock_gettime(CLOCK_MONOTONIC_RAW, &timeSpec)
-      }
-    #else
-      clock_gettime(CLOCK_MONOTONIC_RAW, &timeSpec)
-    #endif
-    return UInt64(timeSpec.tv_sec) * 1_000_000_000 + UInt64(timeSpec.tv_nsec)
+  var timeSpec = timespec()
+  #if os(Linux)
+  // Prefer CLOCK_BOOTTIME which continues ticking during suspend.
+  // If unavailable, fall back to the raw hardware clock.
+  if clock_gettime(CLOCK_BOOTTIME, &timeSpec) != 0 {
+    clock_gettime(CLOCK_MONOTONIC_RAW, &timeSpec)
+  }
+  #else
+  clock_gettime(CLOCK_MONOTONIC_RAW, &timeSpec)
+  #endif
+  return UInt64(timeSpec.tv_sec) * 1_000_000_000 + UInt64(timeSpec.tv_nsec)
   #endif
 }
