@@ -1,4 +1,5 @@
 # AGENTS — WrkstrmPerformance
+Use `swift format` to lint Swift code in this directory.
 [//]: # (Author & Architect: Rismay)
 
 WrkstrmPerformance provides instrumentation utilities for timing and benchmarking Swift code.
