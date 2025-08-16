@@ -13,7 +13,7 @@ Package.Inject.remote.dependencies = [
 ]
 #if !os(Linux)
 Package.Inject.remote.dependencies.append(
-  .package(url: "https://github.com/ordo-one/package-benchmark", .upToNextMajor(from: "1.4.0"))
+  .package(url: "https://github.com/ordo-one/package-benchmark.git", .upToNextMajor(from: "1.4.0"))
 )
 #endif
 
