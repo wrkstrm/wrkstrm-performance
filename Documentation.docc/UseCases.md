@@ -34,4 +34,4 @@ SPM_USE_LOCAL_DEPS=false swift package benchmark baseline check main
 
 ## See Also
 
-- Repository guidance in `.wrkstrm/clia/Agents.md`
+- Repository guidance in `.wrkstrm/clia/AGENTS.md`
