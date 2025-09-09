@@ -36,6 +36,10 @@ packageProducts.append(
   )
 )
 #endif
+// Perf support library (universal)
+packageProducts.append(
+  .library(name: "WrkstrmPerfSupport", targets: ["WrkstrmPerfSupport"])
+)
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
   "WrkstrmLog"
@@ -80,6 +84,14 @@ packageTargets.append(
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: wrkstrmPerformanceTestDependencies,
+    swiftSettings: Package.Inject.shared.swiftSettings
+  )
+)
+// Perf support target (no additional deps needed)
+packageTargets.append(
+  .target(
+    name: "WrkstrmPerfSupport",
+    dependencies: [],
     swiftSettings: Package.Inject.shared.swiftSettings
   )
 )
