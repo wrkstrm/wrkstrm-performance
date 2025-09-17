@@ -18,7 +18,8 @@ Package.Inject.remote.dependencies.append(
 #endif
 
 var packageProducts: [Product] = [
-  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"])
+  .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
+  .library(name: "WrkstrmEnvironment", targets: ["WrkstrmEnvironment"])
 ]
 #if !os(Linux)
 packageProducts.append(
@@ -62,6 +63,12 @@ var packageTargets: [Target] = [
     name: "WrkstrmPerformance",
     dependencies: wrkstrmPerformanceDependencies,
     swiftSettings: Package.Inject.shared.swiftSettings
+  ),
+  .target(
+    name: "WrkstrmEnvironment",
+    dependencies: [],
+    path: "Sources/WrkstrmEnvironment",
+    swiftSettings: Package.Inject.shared.swiftSettings
   )
 ]
 #if !os(Linux)
@@ -84,6 +91,14 @@ packageTargets.append(
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: wrkstrmPerformanceTestDependencies,
+    swiftSettings: Package.Inject.shared.swiftSettings
+  )
+)
+packageTargets.append(
+  .testTarget(
+    name: "WrkstrmEnvironmentTests",
+    dependencies: ["WrkstrmEnvironment"],
+    path: "Tests/WrkstrmEnvironmentTests",
     swiftSettings: Package.Inject.shared.swiftSettings
   )
 )
@@ -117,7 +132,7 @@ let package = Package(
   name: "WrkstrmPerformance",
   platforms: [
     .iOS(.v16),
-    .macOS(.v15),
+    .macOS(.v14),
     .macCatalyst(.v16),
     .tvOS(.v16),
     .visionOS(.v1),

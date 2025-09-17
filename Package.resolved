@@ -1,5 +1,5 @@
 {
-  "originHash" : "03c2cad0728d514ec913b17a6d6f362d8a57f431fcf3aa92babf10fe2e397b14",
+  "originHash" : "c591440467d8346436e30920ffc4adb8330f7b2d0dd69164700b2ccc0b6d5c4d",
   "pins" : [
     {
       "identity" : "swift-log",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
         "version" : "1.6.4"
-      }
-    },
-    {
-      "identity" : "wrkstrmlog",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/wrkstrm/WrkstrmLog.git",
-      "state" : {
-        "revision" : "252aa525989485f6539a0d6471f8dbe38ecc4ee5",
-        "version" : "2.0.0"
       }
     }
   ],
