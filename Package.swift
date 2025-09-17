@@ -19,7 +19,7 @@ Package.Inject.remote.dependencies.append(
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
-  .library(name: "WrkstrmEnvironment", targets: ["WrkstrmEnvironment"])
+  .library(name: "WrkstrmEnvironment", targets: ["WrkstrmEnvironment"]),
 ]
 #if !os(Linux)
 packageProducts.append(
@@ -69,7 +69,7 @@ var packageTargets: [Target] = [
     dependencies: [],
     path: "Sources/WrkstrmEnvironment",
     swiftSettings: Package.Inject.shared.swiftSettings
-  )
+  ),
 ]
 #if !os(Linux)
 packageTargets += [

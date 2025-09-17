@@ -7,7 +7,14 @@ import Testing
 @Test
 func benchmarkMonitorCapturesMetrics() {
   let configuration = Benchmark.Configuration(
-    metrics: [.peakMemoryResident, .cpuSystem],
+    metrics: [
+      .peakMemoryResident,
+      .cpuSystem,
+      .cpuUser,
+      .cpuTotal,
+      .threads,
+      .instructions,
+    ],
     warmupIterations: 0,
     maxIterations: 1
   )
@@ -19,6 +26,18 @@ func benchmarkMonitorCapturesMetrics() {
   }
 
   #expect(results[.peakMemoryResident] != nil)
-  #expect(results[.cpuSystem] != nil)
+#if canImport(Darwin)
+  #expect((results[.cpuSystem]?.statistics.average ?? 0) > 0)
+  #expect((results[.cpuUser]?.statistics.average ?? 0) > 0)
+  #expect((results[.cpuTotal]?.statistics.average ?? 0) > 0)
+  #expect((results[.threads]?.statistics.average ?? 0) >= 1)
+  #expect((results[.instructions]?.statistics.average ?? 0) > 0)
+#else
+  #expect((results[.cpuSystem]?.statistics.average ?? 0) > 0)
+  #expect((results[.cpuUser]?.statistics.average ?? 0) > 0)
+  #expect((results[.cpuTotal]?.statistics.average ?? 0) > 0)
+  #expect(results[.threads] == nil)
+  #expect(results[.instructions] == nil)
+#endif
 }
 #endif
