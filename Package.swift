@@ -11,11 +11,6 @@ Package.Inject.local.dependencies = [
 Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0")
 ]
-#if !os(Linux)
-Package.Inject.remote.dependencies.append(
-  .package(url: "https://github.com/ordo-one/package-benchmark.git", .upToNextMajor(from: "1.4.0"))
-)
-#endif
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
@@ -48,15 +43,6 @@ var wrkstrmPerformanceDependencies: [Target.Dependency] = [
 var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
   "WrkstrmPerformance"
 ]
-
-//#if !os(Linux) && canImport(Darwin)
-//wrkstrmPerformanceDependencies.append(
-//  .product(name: "Benchmark", package: "package-benchmark")
-//)
-//wrkstrmPerformanceTestDependencies.append(
-//  .product(name: "Benchmark", package: "package-benchmark")
-//)
-//#endif  // !os(Linux) && canImport(Darwin)
 
 var packageTargets: [Target] = [
   .target(
@@ -117,13 +103,9 @@ packageTargets.append(
 //    name: "TimeMonitorBenchmarks",
 //    dependencies: [
 //      "WrkstrmPerformance",
-//      .product(name: "Benchmark", package: "package-benchmark"),
 //    ],
 //    path: "Benchmarks/TimeMonitorBenchmarks",
 //    swiftSettings: Package.Inject.shared.swiftSettings,
-//    plugins: [
-//      .plugin(name: "BenchmarkPlugin", package: "package-benchmark")
-//    ]
 //  )
 //)
 //#endif

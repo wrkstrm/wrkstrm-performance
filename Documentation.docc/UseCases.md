@@ -28,6 +28,12 @@ Create a reusable baseline and compare subsequent runs against it:
 
 ```bash
 cd apple/spm/universal/WrkstrmPerformance
+
+## Quick links
+
+- See [PerfRunner — Lightweight Timing Helpers](PerfRunner.md) for closure‑based duration/iteration
+  utilities and examples using CommonShellPerf.
+
 SPM_USE_LOCAL_DEPS=false swift package --allow-writing-to-package-directory benchmark baseline update main
 SPM_USE_LOCAL_DEPS=false swift package benchmark baseline check main
 ```
