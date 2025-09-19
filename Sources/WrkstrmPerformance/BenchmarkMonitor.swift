@@ -22,7 +22,7 @@ public enum BenchmarkMonitor {
   public static func measure(
     _ name: String,
     configuration: Benchmark.Configuration,
-    _ body: @escaping (_ benchmark: Benchmark) -> Void
+    _ body: @escaping (_ benchmark: Benchmark) -> Void,
   ) -> [BenchmarkMetric: BenchmarkResult] {
     guard let benchmark = Benchmark(name, configuration: configuration, closure: { _ in }) else {
       return [:]
@@ -48,25 +48,31 @@ public enum BenchmarkMonitor {
       switch metric {
       case .wallClock:
         addTimeMetric(metric, value: end &- start, configuration: configuration, into: &results)
+
       case .cpuSystem:
         let systemDelta = systemTimeDelta(start: startUsage, end: endUsage)
         addTimeMetric(metric, value: systemDelta, configuration: configuration, into: &results)
+
       case .cpuUser:
         if usageDelta.userTimeNs > 0 {
           addTimeMetric(
             metric,
             value: usageDelta.userTimeNs,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .cpuTotal:
         let total = usageDelta.userTimeNs &+ usageDelta.systemTimeNs
         if total > 0 {
           addTimeMetric(metric, value: total, configuration: configuration, into: &results)
         }
+
       case .peakMemoryResident:
-        addPeakResidentMetric(metric, endUsage: endUsage, configuration: configuration, into: &results)
+        addPeakResidentMetric(
+          metric, endUsage: endUsage, configuration: configuration, into: &results)
+
       case .peakMemoryResidentDelta:
         if usageDelta.residentDeltaBytes > 0 {
           addCountMetric(
@@ -74,9 +80,10 @@ public enum BenchmarkMonitor {
             value: usageDelta.residentDeltaBytes,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .peakMemoryVirtual:
         if usageDelta.virtualSizeBytes > 0 {
           addCountMetric(
@@ -84,9 +91,10 @@ public enum BenchmarkMonitor {
             value: usageDelta.virtualSizeBytes,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .allocatedResidentMemory:
         if usageDelta.physFootprintBytes > 0 {
           addCountMetric(
@@ -94,9 +102,10 @@ public enum BenchmarkMonitor {
             value: usageDelta.physFootprintBytes,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .syscalls:
         if usageDelta.syscalls > 0 {
           addCountMetric(
@@ -104,9 +113,10 @@ public enum BenchmarkMonitor {
             value: usageDelta.syscalls,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .contextSwitches:
         if usageDelta.contextSwitches > 0 {
           addCountMetric(
@@ -114,9 +124,10 @@ public enum BenchmarkMonitor {
             value: usageDelta.contextSwitches,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .threads:
         if usageDelta.threadCountPeak > 0 {
           addCountMetric(
@@ -124,9 +135,10 @@ public enum BenchmarkMonitor {
             value: UInt64(usageDelta.threadCountPeak),
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .threadsRunning:
         if usageDelta.threadsRunningPeak > 0 {
           addCountMetric(
@@ -134,9 +146,10 @@ public enum BenchmarkMonitor {
             value: UInt64(usageDelta.threadsRunningPeak),
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       case .instructions:
         if usageDelta.instructions > 0 {
           addCountMetric(
@@ -144,23 +157,24 @@ public enum BenchmarkMonitor {
             value: usageDelta.instructions,
             units: .count,
             configuration: configuration,
-            into: &results
+            into: &results,
           )
         }
+
       default:
         continue
       }
     }
 
     return results
-}
+  }
 
   /// Convenience overload where the closure does not require the `Benchmark` parameter.
   @discardableResult
   public static func measure(
     _ name: String,
     configuration: Benchmark.Configuration,
-    _ body: @escaping () -> Void
+    _ body: @escaping () -> Void,
   ) -> [BenchmarkMetric: BenchmarkResult] {
     measure(name, configuration: configuration) { _ in body() }
   }
@@ -170,7 +184,7 @@ public enum BenchmarkMonitor {
   public static func measureAsync(
     _ name: String,
     configuration: Benchmark.Configuration,
-    _ body: @escaping () async throws -> Void
+    _ body: @escaping () async throws -> Void,
   ) async throws -> [BenchmarkMetric: BenchmarkResult] {
     var thrownError: Error?
     let results = measure(name, configuration: configuration) { _ in
@@ -194,7 +208,7 @@ private func addTimeMetric(
   _ metric: BenchmarkMetric,
   value: UInt64,
   configuration: Benchmark.Configuration,
-  into results: inout [BenchmarkMetric: BenchmarkResult]
+  into results: inout [BenchmarkMetric: BenchmarkResult],
 ) {
   guard value > 0 else { return }
   let stats = Statistics(units: .automatic, prefersLarger: metric.polarity == .prefersLarger)
@@ -210,7 +224,7 @@ private func addTimeMetric(
     warmupIterations: configuration.warmupIterations,
     thresholds: configuration.thresholds?[metric],
     tags: configuration.tags,
-    statistics: stats
+    statistics: stats,
   )
 }
 
@@ -219,7 +233,7 @@ private func addCountMetric(
   value: UInt64,
   units: Statistics.Units,
   configuration: Benchmark.Configuration,
-  into results: inout [BenchmarkMetric: BenchmarkResult]
+  into results: inout [BenchmarkMetric: BenchmarkResult],
 ) {
   guard value > 0 else { return }
   let stats = Statistics(units: units, prefersLarger: metric.polarity == .prefersLarger)
@@ -235,7 +249,7 @@ private func addCountMetric(
     warmupIterations: configuration.warmupIterations,
     thresholds: configuration.thresholds?[metric],
     tags: configuration.tags,
-    statistics: stats
+    statistics: stats,
   )
 }
 
@@ -243,15 +257,15 @@ private func addPeakResidentMetric(
   _ metric: BenchmarkMetric,
   endUsage: rusage,
   configuration: Benchmark.Configuration,
-  into results: inout [BenchmarkMetric: BenchmarkResult]
+  into results: inout [BenchmarkMetric: BenchmarkResult],
 ) {
-#if canImport(Glibc)
+  #if canImport(Glibc)
   let memBytes = UInt64(endUsage.ru_maxrss) * 1024
-#elseif canImport(Darwin)
+  #elseif canImport(Darwin)
   let memBytes = UInt64(endUsage.ru_maxrss)
-#else
+  #else
   let memBytes = UInt64(endUsage.ru_maxrss)
-#endif
+  #endif
   guard memBytes > 0 else { return }
   let stats = Statistics(units: .count, prefersLarger: metric.polarity == .prefersLarger)
   stats.add(clampToInt(memBytes))
@@ -266,7 +280,7 @@ private func addPeakResidentMetric(
     warmupIterations: configuration.warmupIterations,
     thresholds: configuration.thresholds?[metric],
     tags: configuration.tags,
-    statistics: stats
+    statistics: stats,
   )
 }
 
@@ -326,12 +340,12 @@ private func usageDifference(start: UsageSnapshot, end: UsageSnapshot) -> UsageD
     threadsRunningPeak: max(end.threadsRunning, start.threadsRunning),
     instructions: end.instructions > start.instructions
       ? end.instructions &- start.instructions
-      : 0
+      : 0,
   )
 }
 
 private func captureUsageSnapshot() -> UsageSnapshot {
-#if canImport(Darwin)
+  #if canImport(Darwin)
   let pid = getpid()
 
   var taskInfo = proc_taskinfo()
@@ -352,7 +366,8 @@ private func captureUsageSnapshot() -> UsageSnapshot {
 
   let resident = taskResult == taskInfoSize ? taskInfo.pti_resident_size : 0
   let virtual = taskResult == taskInfoSize ? taskInfo.pti_virtual_size : 0
-  let syscalls = taskResult == taskInfoSize
+  let syscalls =
+    taskResult == taskInfoSize
     ? UInt64(taskInfo.pti_syscalls_mach + taskInfo.pti_syscalls_unix)
     : 0
   let contextSwitches = taskResult == taskInfoSize ? UInt64(taskInfo.pti_csw) : 0
@@ -369,14 +384,16 @@ private func captureUsageSnapshot() -> UsageSnapshot {
     contextSwitches: contextSwitches,
     threadCount: threadCount,
     threadsRunning: threadsRunning,
-    instructions: instructions
+    instructions: instructions,
   )
-#else
+  #else
   var usage = rusage()
   getrusage(RUSAGE_SELF, &usage)
-  let user = UInt64(usage.ru_utime.tv_sec) * 1_000_000_000
+  let user =
+    UInt64(usage.ru_utime.tv_sec) * 1_000_000_000
     + UInt64(usage.ru_utime.tv_usec) * 1000
-  let system = UInt64(usage.ru_stime.tv_sec) * 1_000_000_000
+  let system =
+    UInt64(usage.ru_stime.tv_sec) * 1_000_000_000
     + UInt64(usage.ru_stime.tv_usec) * 1000
   let contextSwitches = UInt64(usage.ru_nvcsw) + UInt64(usage.ru_nivcsw)
   return UsageSnapshot(
@@ -389,8 +406,8 @@ private func captureUsageSnapshot() -> UsageSnapshot {
     contextSwitches: contextSwitches,
     threadCount: 0,
     threadsRunning: 0,
-    instructions: 0
+    instructions: 0,
   )
-#endif
+  #endif
 }
 #endif

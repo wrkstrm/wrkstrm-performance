@@ -29,8 +29,9 @@ public enum PerfRunner {
 
 ## Using with CommonShell
 
-If you want to measure process invocations via CommonShell without coupling CommonShell to
-WrkstrmPerformance, add the opt‑in package `CommonShellPerf` and use its extensions:
+If you want to measure process invocations via CommonShell without coupling the core target to
+WrkstrmPerformance, depend on the opt‑in **CommonShellPerf** library (shipped with the CommonShell
+package) and use its extensions:
 
 ```swift
 import CommonShell

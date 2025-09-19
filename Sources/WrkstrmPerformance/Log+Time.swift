@@ -8,8 +8,9 @@ extension Log {
   /// ```
   /// Log.mach.info("Application started")
   /// ```
-  nonisolated(unsafe) public static var time: Log = .init(
-    system: "mach-time", category: "performance")
+  public nonisolated(unsafe) static var time: Log = .init(
+    system: "mach-time", category: "performance",
+  )
   {
     didSet {
       verbose("New Logger: \(shared)")

@@ -32,7 +32,7 @@ public actor TimeMonitor: @unchecked Sendable {
     _ event: String,
     timestamp: UInt64 = uptimeNanoseconds(),
     file _: String = #file,
-    line _: Int = #line
+    line _: Int = #line,
   ) {
     timestamps[event] = timestamp
 
@@ -94,7 +94,7 @@ public actor TimeMonitor: @unchecked Sendable {
     name: String,
     start: UInt64,
     end: UInt64 = uptimeNanoseconds(),
-    trackSinceStartup: Bool = false
+    trackSinceStartup: Bool = false,
   ) {
     let durationSeconds = duration(from: start, to: end)
     Log.time.verbose("⏱️ [\(name)] took \(String(format: "%.9f", durationSeconds))s")
@@ -114,10 +114,11 @@ public actor TimeMonitor: @unchecked Sendable {
   public func measureAverageExecutionTime(
     name: String,
     iterations: Int,
-    action: @Sendable () async throws -> Void
+    action: @Sendable () async throws -> Void,
   ) async rethrows -> Double {
     precondition(
-      iterations > 0, "Iterations must be greater than zero in measureAverageExecutionTime")
+      iterations > 0, "Iterations must be greater than zero in measureAverageExecutionTime",
+    )
     var total: UInt64 = 0
     for _ in 0..<iterations {
       let start = uptimeNanoseconds()
@@ -138,6 +139,7 @@ public actor TimeMonitor: @unchecked Sendable {
 }
 
 // MARK: - Nonisolated static helpers
+
 extension TimeMonitor {
   /// Mark a timestamp for early boot events
   public nonisolated static func markEarlyTimestamp(_ event: String) {
@@ -161,14 +163,14 @@ extension TimeMonitor {
     name: String,
     start: UInt64,
     end: UInt64 = uptimeNanoseconds(),
-    trackSinceStartup: Bool = false
+    trackSinceStartup: Bool = false,
   ) {
     Task {
       await shared.recordPreciseMeasurement(
         name: name,
         start: start,
         end: end,
-        trackSinceStartup: trackSinceStartup
+        trackSinceStartup: trackSinceStartup,
       )
     }
   }
@@ -176,12 +178,12 @@ extension TimeMonitor {
   public nonisolated static func measureAverageExecutionTime(
     name: String,
     iterations: Int,
-    action: @Sendable () async throws -> Void
+    action: @Sendable () async throws -> Void,
   ) async rethrows -> Double {
     try await shared.measureAverageExecutionTime(
       name: name,
       iterations: iterations,
-      action: action
+      action: action,
     )
   }
 }

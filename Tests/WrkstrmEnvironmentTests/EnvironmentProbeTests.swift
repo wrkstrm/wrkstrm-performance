@@ -63,6 +63,6 @@ struct TemporaryDirectory {
     let base = FileManager.default.temporaryDirectory
     let dir = base.appendingPathComponent(UUID().uuidString)
     try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    self.url = dir
+    url = dir
   }
 }

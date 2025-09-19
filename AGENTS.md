@@ -37,3 +37,9 @@ let split: UISplitViewController = .init(style: .doubleColumn) // explicit type 
 In both cases, the `style: .doubleColumn` initializer sets up the split view
 controller with the double-column layout introduced in iOS 14. The `.init`
 style works only when the compiler can already determine the variable’s type.
+
+## Assistant Operating Mode
+
+- Git command approval: do not run any `git` commands without explicit user approval
+  (including but not limited to `clone`, `status`, `add`, `commit`, `reset`, `rebase`, `push`,
+  `submodule`, `config`). Prefer reading workspace files over invoking `git` when possible.

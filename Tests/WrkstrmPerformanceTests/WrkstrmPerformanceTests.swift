@@ -50,7 +50,7 @@ func recordPreciseMeasurementUsesProvidedEndTimeForStartupTracking() async {
     name: "custom_measurement",
     start: measurementStart,
     end: measurementEnd,
-    trackSinceStartup: true
+    trackSinceStartup: true,
   )
 
   let recorded = await monitor.timestamp(for: "custom_measurement.startup")
@@ -62,7 +62,7 @@ func measureAverageExecutionTimeReturnsMean() async throws {
   let iterations = 3
   let average = try await TimeMonitor.shared.measureAverageExecutionTime(
     name: "sleep_test",
-    iterations: iterations
+    iterations: iterations,
   ) {
     try await Task.sleep(nanoseconds: 10_000_000)
   }

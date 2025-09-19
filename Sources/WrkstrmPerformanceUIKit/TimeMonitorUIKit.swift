@@ -16,14 +16,14 @@ public final class TimeMonitorUIKit: NSObject {
       self,
       selector: #selector(applicationDidFinishLaunching),
       name: UIApplication.didFinishLaunchingNotification,
-      object: nil
+      object: nil,
     )
 
     notificationCenter.addObserver(
       self,
       selector: #selector(applicationDidBecomeActive),
       name: UIApplication.didBecomeActiveNotification,
-      object: nil
+      object: nil,
     )
   }
 

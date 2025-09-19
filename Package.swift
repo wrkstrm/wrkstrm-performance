@@ -21,20 +21,20 @@ packageProducts.append(
   .library(
     name: "WrkstrmPerformanceObjC",
     type: .static,
-    targets: ["WrkstrmPerformanceObjC"]
-  )
+    targets: ["WrkstrmPerformanceObjC"],
+  ),
 )
 packageProducts.append(
   .library(
     name: "WrkstrmPerformanceUIKit",
     type: .static,
-    targets: ["WrkstrmPerformanceUIKit"]
-  )
+    targets: ["WrkstrmPerformanceUIKit"],
+  ),
 )
 #endif
 // Perf support library (universal)
 packageProducts.append(
-  .library(name: "WrkstrmPerfSupport", targets: ["WrkstrmPerfSupport"])
+  .library(name: "WrkstrmPerfSupport", targets: ["WrkstrmPerfSupport"]),
 )
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
@@ -48,20 +48,20 @@ var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
     dependencies: wrkstrmPerformanceDependencies,
-    swiftSettings: Package.Inject.shared.swiftSettings
+    swiftSettings: Package.Inject.shared.swiftSettings,
   ),
   .target(
     name: "WrkstrmEnvironment",
     dependencies: [],
     path: "Sources/WrkstrmEnvironment",
-    swiftSettings: Package.Inject.shared.swiftSettings
+    swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 ]
 #if !os(Linux)
 packageTargets += [
   .target(
     name: "WrkstrmPerformanceObjC",
-    publicHeadersPath: "include"
+    publicHeadersPath: "include",
   ),
   .target(
     name: "WrkstrmPerformanceUIKit",
@@ -69,7 +69,7 @@ packageTargets += [
       "WrkstrmPerformance",
       "WrkstrmPerformanceObjC",
     ],
-    swiftSettings: Package.Inject.shared.swiftSettings
+    swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 ]
 #endif
@@ -77,28 +77,28 @@ packageTargets.append(
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: wrkstrmPerformanceTestDependencies,
-    swiftSettings: Package.Inject.shared.swiftSettings
-  )
+    swiftSettings: Package.Inject.shared.swiftSettings,
+  ),
 )
 packageTargets.append(
   .testTarget(
     name: "WrkstrmEnvironmentTests",
     dependencies: ["WrkstrmEnvironment"],
     path: "Tests/WrkstrmEnvironmentTests",
-    swiftSettings: Package.Inject.shared.swiftSettings
-  )
+    swiftSettings: Package.Inject.shared.swiftSettings,
+  ),
 )
 // Perf support target (no additional deps needed)
 packageTargets.append(
   .target(
     name: "WrkstrmPerfSupport",
     dependencies: [],
-    swiftSettings: Package.Inject.shared.swiftSettings
-  )
+    swiftSettings: Package.Inject.shared.swiftSettings,
+  ),
 )
 
-//#if !os(Linux)
-//packageTargets.append(
+// #if !os(Linux)
+// packageTargets.append(
 //  .executableTarget(
 //    name: "TimeMonitorBenchmarks",
 //    dependencies: [
@@ -107,8 +107,8 @@ packageTargets.append(
 //    path: "Benchmarks/TimeMonitorBenchmarks",
 //    swiftSettings: Package.Inject.shared.swiftSettings,
 //  )
-//)
-//#endif
+// )
+// #endif
 
 let package = Package(
   name: "WrkstrmPerformance",
@@ -122,7 +122,7 @@ let package = Package(
   ],
   products: packageProducts,
   dependencies: Package.Inject.shared.dependencies,
-  targets: packageTargets
+  targets: packageTargets,
 )
 
 // MARK: - Package Service

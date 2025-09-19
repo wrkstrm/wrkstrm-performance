@@ -28,7 +28,7 @@ public struct EnvironmentSnapshot: Sendable {
     gitRemotes: [String],
     hasGitSubmodules: Bool,
     cliaPathOnSystem: String?,
-    taskTimerStatus: String?
+    taskTimerStatus: String?,
   ) {
     self.osDescription = osDescription
     self.hostName = hostName
@@ -54,13 +54,15 @@ public struct EnvironmentSnapshot: Sendable {
     lines.append(
       "Working dir: \(workingDirectory) (writable: \(isWorkingDirectoryWritable ? "yes" : "no"))")
     lines.append(
-      "Repo: \(isInsideGitRepository ? "true" : "false") (branch: \(gitBranchName.isEmpty ? "-" : gitBranchName))"
+      "Repo: \(isInsideGitRepository ? "true" : "false") (branch: \(gitBranchName.isEmpty ? "-" : gitBranchName))",
     )
     lines.append("Remotes:")
     if gitRemotes.isEmpty {
       lines.append("  - (none)")
     } else {
-      for r in gitRemotes { lines.append("  - \(r)") }
+      for r in gitRemotes {
+        lines.append("  - \(r)")
+      }
     }
     lines.append("Submodules: \(hasGitSubmodules ? "yes" : "no")")
     lines.append("clia on PATH: \(cliaPathOnSystem ?? "not found")")
@@ -101,7 +103,7 @@ public enum EnvironmentProbe {
       gitRemotes: remotes,
       hasGitSubmodules: hasSubmodules,
       cliaPathOnSystem: cliaPath,
-      taskTimerStatus: timerStatus
+      taskTimerStatus: timerStatus,
     )
   }
 }
@@ -116,6 +118,7 @@ enum SystemInfo {
     return ProcessInfo.processInfo.operatingSystemVersionString
     #endif
   }
+
   static func hostName() -> String {
     Host.current().localizedName ?? ProcessInfo.processInfo.hostName
   }
@@ -127,6 +130,7 @@ public enum GitInfo {
     public var branchName: String
     public var remotes: [String]
   }
+
   public static func detectRepository() -> Repository {
     let fm = FileManager.default
     var isDir: ObjCBool = false
@@ -136,9 +140,10 @@ public enum GitInfo {
     return .init(
       isInRepository: true,
       branchName: readBranchName(from: ".git"),
-      remotes: readRemotes(from: ".git")
+      remotes: readRemotes(from: ".git"),
     )
   }
+
   static func readBranchName(from gitPath: String) -> String {
     let headPath = (gitPath as NSString).appendingPathComponent("HEAD")
     guard let head = try? String(contentsOfFile: headPath, encoding: .utf8) else { return "" }
@@ -148,6 +153,7 @@ public enum GitInfo {
     }
     return head.trimmingCharacters(in: .whitespacesAndNewlines)
   }
+
   static func readRemotes(from gitPath: String) -> [String] {
     let configPath = (gitPath as NSString).appendingPathComponent("config")
     guard let cfg = try? String(contentsOfFile: configPath, encoding: .utf8) else { return [] }
@@ -180,10 +186,12 @@ public enum HeartbeatProbe {
     public var startedAt: String?
     public var status: String?
   }
+
   public static func read(at path: String) -> Payload? {
     guard let data = FileManager.default.contents(atPath: path) else { return nil }
     return try? JSONDecoder().decode(Payload.self, from: data)
   }
+
   public static func status(at path: String) -> String? { read(at: path)?.status }
   public static func startedAtISO8601(at path: String) -> String? { read(at: path)?.startedAt }
 }

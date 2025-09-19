@@ -11,7 +11,8 @@ public actor DurationAggregator {
     let n = samples.count
     guard n > 0 else {
       return LatencySummary(
-        count: 0, failures: failures, min: nil, max: nil, mean: nil, p50: nil, p90: nil, p99: nil)
+        count: 0, failures: failures, min: nil, max: nil, mean: nil, p50: nil, p90: nil, p99: nil,
+      )
     }
     let sorted = samples.sorted()
     let minv = sorted.first!
@@ -23,7 +24,8 @@ public actor DurationAggregator {
     }
     return LatencySummary(
       count: n, failures: failures, min: minv, max: maxv, mean: mean, p50: pct(0.50),
-      p90: pct(0.90), p99: pct(0.99))
+      p90: pct(0.90), p99: pct(0.99),
+    )
   }
 }
 
@@ -39,7 +41,7 @@ public struct LatencySummary: Sendable {
 
   public init(
     count: Int, failures: Int, min: Double?, max: Double?, mean: Double?, p50: Double?,
-    p90: Double?, p99: Double?
+    p90: Double?, p99: Double?,
   ) {
     self.count = count
     self.failures = failures
@@ -102,7 +104,11 @@ public enum Renderer {
       ])
     }
     var widths = Array(repeating: 0, count: rows.first!.count)
-    for row in rows { for (i, col) in row.enumerated() { widths[i] = max(widths[i], col.count) } }
+    for row in rows {
+      for (i, col) in row.enumerated() {
+        widths[i] = max(widths[i], col.count)
+      }
+    }
     func pad(_ s: String, _ w: Int) -> String {
       s + String(repeating: " ", count: max(0, w - s.count))
     }
@@ -139,7 +145,9 @@ public enum Renderer {
     }
     var out = "| " + rows[0].joined(separator: " | ") + " |\n"
     out += "|" + rows[0].map { _ in " --- " }.joined(separator: "|") + "|\n"
-    for row in rows.dropFirst() { out += "| " + row.joined(separator: " | ") + " |\n" }
+    for row in rows.dropFirst() {
+      out += "| " + row.joined(separator: " | ") + " |\n"
+    }
     return out
   }
 }
