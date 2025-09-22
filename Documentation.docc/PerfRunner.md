@@ -22,10 +22,10 @@ public enum PerfRunner {
 }
 ```
 
-- `iterations`: run the body a fixed number of times; reports total and average ms.
-- `duration`: run the body until the time budget elapses; reports the number of iterations and
+- ``iterations``: run the body a fixed number of times; reports total and average ms.
+- ``duration``: run the body until the time budget elapses; reports the number of iterations and
   total/average ms.
-- `targetHz`: optional pacing hint (simple sleep‑based pacing after each body run).
+- ``targetHz``: optional pacing hint (simple sleep‑based pacing after each body run).
 
 ## Using with CommonShell
 
