@@ -5,17 +5,22 @@ import PackageDescription
 // MARK: - Package Configuration
 
 Package.Inject.local.dependencies = [
-  .package(name: "WrkstrmLog", path: "../WrkstrmLog")
+  .package(name: "WrkstrmLog", path: "../WrkstrmLog"),
+  .package(name: "WrkstrmMain", path: "../WrkstrmMain"),
+  .package(name: "WrkstrmFoundation", path: "../WrkstrmFoundation"),
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0")
+  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0"),
+  .package(url: "https://github.com/wrkstrm/WrkstrmMain.git", from: "2.4.0"),
+  .package(url: "https://github.com/wrkstrm/WrkstrmFoundation.git", from: "2.0.0")
 ]
 
 var packageProducts: [Product] = [
   .library(name: "WrkstrmPerformance", targets: ["WrkstrmPerformance"]),
   .library(name: "WrkstrmEnvironment", targets: ["WrkstrmEnvironment"]),
 ]
+
 #if !os(Linux)
 packageProducts.append(
   .library(
@@ -38,7 +43,9 @@ packageProducts.append(
 )
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
-  "WrkstrmLog"
+  "WrkstrmLog",
+  "WrkstrmMain",
+  "WrkstrmFoundation"
 ]
 var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
   "WrkstrmPerformance"
@@ -96,19 +103,6 @@ packageTargets.append(
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 )
-
-// #if !os(Linux)
-// packageTargets.append(
-//  .executableTarget(
-//    name: "TimeMonitorBenchmarks",
-//    dependencies: [
-//      "WrkstrmPerformance",
-//    ],
-//    path: "Benchmarks/TimeMonitorBenchmarks",
-//    swiftSettings: Package.Inject.shared.swiftSettings,
-//  )
-// )
-// #endif
 
 let package = Package(
   name: "WrkstrmPerformance",
