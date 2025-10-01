@@ -2,6 +2,8 @@ import Foundation
 import WrkstrmLog
 import WrkstrmMain
 
+// Canonical definitions of JSON parse metrics live here in WrkstrmPerformance.
+// Other packa  ges should import (or re-export) this module rather than redefining.
 extension WrkstrmMain.JSON {
   public enum ParseOperation: String, Codable, Sendable { case encode, decode }
 

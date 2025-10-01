@@ -14,14 +14,14 @@ private struct _AnyJSONDecoding: JSONDataDecoding {
   }
 }
 
-public extension WrkstrmMain.JSON.Parser {
+extension WrkstrmMain.JSON.Parser {
   /// Build a composite parser from a list of parser details.
   /// - Parameters:
   ///   - details: Array of parser name+parser pairs. The first is considered primary for .usePrimary/.shadow.
   ///   - mode: Selection mode: `.parallel` (round-robin), `.shadow` (primary returns, others run in background), `.usePrimary` (always first).
   ///   - context: Optional context string attached to metrics events.
   ///   - store: Metrics store for instrumentation.
-  static func composite(
+  public static func composite(
     _ details: [WrkstrmMain.JSON.ParserInstrumentationDetails],
     mode: WrkstrmMain.JSON.CompositeMode,
     context: String? = nil,
@@ -46,7 +46,7 @@ public extension WrkstrmMain.JSON.Parser {
   }
 
   /// Returns an instrumented copy of this parser using the generic wrapper.
-  func instrumented(
+  public func instrumented(
     name: String,
     context: String? = nil,
     store: JSON.ParseMetricsStore?
