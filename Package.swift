@@ -55,6 +55,7 @@ var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
     dependencies: wrkstrmPerformanceDependencies,
+    path: "Sources/WrkstrmPerformance",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
   .target(

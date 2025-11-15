@@ -27,7 +27,7 @@ Results include percentile columns such as `p50`, `p90`, and `p99`. Lower percen
 Create a reusable baseline and compare subsequent runs against it:
 
 ```bash
-cd apple/spm/universal/WrkstrmPerformance
+cd apple/spm/universal/wrkstrm-performance
 
 ## Quick links
 
