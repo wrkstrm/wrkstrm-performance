@@ -55,13 +55,13 @@ var packageTargets: [Target] = [
   .target(
     name: "WrkstrmPerformance",
     dependencies: wrkstrmPerformanceDependencies,
-    path: "Sources/WrkstrmPerformance",
+    path: "sources/wrkstrm-performance",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
   .target(
     name: "WrkstrmEnvironment",
     dependencies: [],
-    path: "Sources/WrkstrmEnvironment",
+    path: "sources/wrkstrm-environment",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 ]
@@ -69,6 +69,7 @@ var packageTargets: [Target] = [
 packageTargets += [
   .target(
     name: "WrkstrmPerformanceObjC",
+    path: "sources/wrkstrm-performance-objc",
     publicHeadersPath: "include",
   ),
   .target(
@@ -77,6 +78,7 @@ packageTargets += [
       "WrkstrmPerformance",
       "WrkstrmPerformanceObjC",
     ],
+    path: "sources/wrkstrm-performance-uikit",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 ]
@@ -85,6 +87,7 @@ packageTargets.append(
   .testTarget(
     name: "WrkstrmPerformanceTests",
     dependencies: wrkstrmPerformanceTestDependencies,
+    path: "tests/wrkstrm-performance-tests",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 )
@@ -92,7 +95,7 @@ packageTargets.append(
   .testTarget(
     name: "WrkstrmEnvironmentTests",
     dependencies: ["WrkstrmEnvironment"],
-    path: "Tests/WrkstrmEnvironmentTests",
+    path: "tests/wrkstrm-environment-tests",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 )
@@ -101,6 +104,7 @@ packageTargets.append(
   .target(
     name: "WrkstrmPerfSupport",
     dependencies: [],
+    path: "sources/wrkstrm-perf-support",
     swiftSettings: Package.Inject.shared.swiftSettings,
   ),
 )

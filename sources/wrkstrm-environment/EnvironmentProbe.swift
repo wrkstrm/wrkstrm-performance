@@ -88,7 +88,7 @@ public enum EnvironmentProbe {
     let hasSubmodules = FileManager.default.fileExists(atPath: ".gitmodules")
 
     let cliaPath = PathLookup.findInPATH("clia")
-    let timerStatus = HeartbeatProbe.status(at: ".wrkstrm/tmp/task-heartbeat.json")
+    let timerStatus = HeartbeatProbe.status(at: ".clia/tmp/task-heartbeat.json")
 
     return EnvironmentSnapshot(
       osDescription: os,
