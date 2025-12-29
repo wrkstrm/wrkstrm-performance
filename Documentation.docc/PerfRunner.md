@@ -34,9 +34,9 @@ WrkstrmPerformance, depend on the opt‑in **CommonShellPerf** library (shipped 
 package) and use its extensions:
 
 ```swift
+import CommonProcess
 import CommonShell
 import CommonShellPerf
-import CommonProcess
 
 let shell = CommonShell(executable: .path("/usr/bin/env"))
 let (iterations, total, avg) = try await shell.perfForInterval(
@@ -52,7 +52,7 @@ Under the hood, `CommonShellPerf` delegates to `WrkstrmPerformance.PerfRunner` t
 
 ```swift
 let res = try await PerfRunner.iterations(1_000) {
-  _ = (0..<100).reduce(0,+)
+  _ = (0..<100).reduce(0, +)
 }
 print(res.iterations, res.averageMS)
 ```
