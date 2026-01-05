@@ -145,8 +145,8 @@ public enum GitInfo {
   }
 
   static func readBranchName(from gitPath: String) -> String {
-    let headPath = (gitPath as NSString).appendingPathComponent("HEAD")
-    guard let head = try? String(contentsOfFile: headPath, encoding: .utf8) else { return "" }
+    let headPath = URL(fileURLWithPath: gitPath).appendingPathComponent("HEAD")
+    guard let head = try? String(contentsOf: headPath, encoding: .utf8) else { return "" }
     if head.hasPrefix("ref: ") {
       let ref = head.dropFirst(5).trimmingCharacters(in: .whitespacesAndNewlines)
       if let name = ref.split(separator: "/").last { return String(name) }
@@ -155,8 +155,8 @@ public enum GitInfo {
   }
 
   static func readRemotes(from gitPath: String) -> [String] {
-    let configPath = (gitPath as NSString).appendingPathComponent("config")
-    guard let cfg = try? String(contentsOfFile: configPath, encoding: .utf8) else { return [] }
+    let configPath = URL(fileURLWithPath: gitPath).appendingPathComponent("config")
+    guard let cfg = try? String(contentsOf: configPath, encoding: .utf8) else { return [] }
     var results: [String] = []
     var currentRemote: String?
     for rawLine in cfg.split(separator: "\n") {
