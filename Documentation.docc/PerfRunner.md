@@ -27,7 +27,7 @@ public enum PerfRunner {
   total/average ms.
 - ``targetHz``: optional pacing hint (simple sleep‑based pacing after each body run).
 
-## Using With CommonShell
+## Using with CommonShell
 
 If you want to measure process invocations via CommonShell without coupling the core target to
 WrkstrmPerformance, depend on the opt‑in **CommonShellPerf** library (shipped with the CommonShell
