@@ -27,7 +27,7 @@ public enum PerfRunner {
   total/average ms.
 - ``targetHz``: optional pacing hint (simple sleep‑based pacing after each body run).
 
-## Using with CommonShell
+## Using With CommonShell
 
 If you want to measure process invocations via CommonShell without coupling the core target to
 WrkstrmPerformance, depend on the opt‑in **CommonShellPerf** library (shipped with the CommonShell
@@ -48,7 +48,7 @@ let (iterations, total, avg) = try await shell.perfForInterval(
 Under the hood, `CommonShellPerf` delegates to `WrkstrmPerformance.PerfRunner` to do timing, while
 `CommonShell` itself avoids importing this package.
 
-## Using directly (no processes)
+## Using Directly (No Processes)
 
 ```swift
 let res = try await PerfRunner.iterations(1_000) {
@@ -57,7 +57,7 @@ let res = try await PerfRunner.iterations(1_000) {
 print(res.iterations, res.averageMS)
 ```
 
-## See also
+## See Also
 
 - CommonShellPerf README for usage with execution hosts and executables.
 - common-cli-perf for a JSON‑driven perf harness that uses `CommonShellPerf`.
