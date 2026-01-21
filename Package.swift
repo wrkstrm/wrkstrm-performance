@@ -11,7 +11,7 @@ Package.Inject.local.dependencies = [
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/common-log.git", from: "4.0.0"),
+  .package(url: "https://github.com/wrkstrm/common-log.git", from: "3.0.0"),
   .package(url: "https://github.com/wrkstrm/WrkstrmMain.git", from: "2.4.0"),
   .package(url: "https://github.com/wrkstrm/WrkstrmFoundation.git", from: "3.0.0"),
 ]
