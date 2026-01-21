@@ -5,13 +5,13 @@ import PackageDescription
 // MARK: - Package Configuration
 
 Package.Inject.local.dependencies = [
-  .package(name: "WrkstrmLog", path: "../WrkstrmLog"),
+  .package(name: "common-log", path: "../common/domain/system/common-log"),
   .package(name: "WrkstrmMain", path: "../WrkstrmMain"),
   .package(name: "WrkstrmFoundation", path: "../WrkstrmFoundation"),
 ]
 
 Package.Inject.remote.dependencies = [
-  .package(url: "https://github.com/wrkstrm/WrkstrmLog.git", from: "2.0.0"),
+  .package(url: "https://github.com/wrkstrm/common-log.git", from: "2.0.0"),
   .package(url: "https://github.com/wrkstrm/WrkstrmMain.git", from: "2.4.0"),
   .package(url: "https://github.com/wrkstrm/WrkstrmFoundation.git", from: "3.0.0"),
 ]
@@ -43,7 +43,7 @@ packageProducts.append(
 )
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
-  "WrkstrmLog",
+  "CommonLog",
   "WrkstrmMain",
   "WrkstrmFoundation",
 ]

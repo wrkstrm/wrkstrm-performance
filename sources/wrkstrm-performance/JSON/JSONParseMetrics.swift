@@ -1,5 +1,5 @@
 import Foundation
-import WrkstrmLog
+import CommonLog
 import WrkstrmMain
 
 // Canonical definitions of JSON parse metrics live here in WrkstrmPerformance.

@@ -1,5 +1,5 @@
 import Foundation
-import WrkstrmLog
+import CommonLog
 
 /// Provides the process start time using Swift's uptime clock. This avoids
 /// having each app declare its own conditional startup timestamp and keeps the

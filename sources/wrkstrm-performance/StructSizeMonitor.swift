@@ -1,4 +1,4 @@
-import WrkstrmLog
+import CommonLog
 
 /// Provides size, stride, and alignment metrics for Swift types.
 public enum StructSizeMonitor {

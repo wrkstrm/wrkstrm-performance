@@ -1,4 +1,4 @@
-import WrkstrmLog
+import CommonLog
 
 extension Log {
   /// The time logger instance, used for mach time logging.
