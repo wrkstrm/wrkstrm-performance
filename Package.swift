@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.2
 import Foundation
 import PackageDescription
 
@@ -6,14 +6,14 @@ import PackageDescription
 
 Package.Inject.local.dependencies = [
   .package(name: "common-log", path: "../common/domain/system/common-log"),
-  .package(name: "WrkstrmMain", path: "../WrkstrmMain"),
+  .package(name: "wrkstrm-main", path: "../domain/system/wrkstrm-main"),
   .package(name: "wrkstrm-foundation", path: "../domain/system/wrkstrm-foundation"),
 ]
 
 Package.Inject.remote.dependencies = [
   .package(url: "https://github.com/wrkstrm/common-log.git", from: "3.0.0"),
-  .package(url: "https://github.com/wrkstrm/WrkstrmMain.git", from: "2.4.0"),
-  .package(url: "https://github.com/wrkstrm/WrkstrmFoundation.git", from: "3.0.0"),
+  .package(url: "https://github.com/wrkstrm/wrkstrm-foundation.git", from: "3.0.0"),
+  .package(url: "https://github.com/wrkstrm/wrkstrm-main.git", from: "3.0.0"),
 ]
 
 var packageProducts: [Product] = [
@@ -44,8 +44,8 @@ packageProducts.append(
 
 var wrkstrmPerformanceDependencies: [Target.Dependency] = [
   .product(name: "CommonLog", package: "common-log"),
-  "WrkstrmMain",
-  "WrkstrmFoundation",
+  .product(name: "WrkstrmMain", package: "wrkstrm-main"),
+  .product(name: "WrkstrmFoundation", package: "wrkstrm-foundation"),
 ]
 var wrkstrmPerformanceTestDependencies: [Target.Dependency] = [
   "WrkstrmPerformance"

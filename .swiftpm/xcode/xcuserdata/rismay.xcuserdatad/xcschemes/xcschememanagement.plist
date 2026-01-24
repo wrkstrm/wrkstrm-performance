@@ -7,27 +7,27 @@
 		<key>WrkstrmEnvironment.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>99</integer>
+			<integer>90</integer>
 		</dict>
 		<key>WrkstrmPerfSupport.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>101</integer>
+			<integer>92</integer>
 		</dict>
 		<key>WrkstrmPerformance.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>103</integer>
+			<integer>91</integer>
 		</dict>
 		<key>WrkstrmPerformanceObjC.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>102</integer>
+			<integer>89</integer>
 		</dict>
 		<key>WrkstrmPerformanceUIKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>100</integer>
+			<integer>88</integer>
 		</dict>
 	</dict>
 </dict>
