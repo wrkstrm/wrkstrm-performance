@@ -7,7 +7,7 @@ import PackageDescription
 Package.Inject.local.dependencies = [
   .package(name: "common-log", path: "../common/domain/system/common-log"),
   .package(name: "WrkstrmMain", path: "../WrkstrmMain"),
-  .package(name: "WrkstrmFoundation", path: "../WrkstrmFoundation"),
+  .package(name: "wrkstrm-foundation", path: "../domain/system/wrkstrm-foundation"),
 ]
 
 Package.Inject.remote.dependencies = [
