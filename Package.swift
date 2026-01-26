@@ -113,7 +113,7 @@ let package = Package(
   name: "WrkstrmPerformance",
   platforms: [
     .iOS(.v16),
-    .macOS(.v14),
+    .macOS(.v15),
     .macCatalyst(.v16),
     .tvOS(.v16),
     .visionOS(.v1),
